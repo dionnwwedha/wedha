@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Kotak Surat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Figtree:wght@400;500;600&family=Reenie+Beanie&display=swap">
+<style>
+/* Mail desk: header envelope, a grid of sealed airmail envelopes, and a letter that unfolds over the page. */
+:root {
+  --bg: #e9eef3; --paper: #fbfcfd; --ink: #1d2a3a; --muted: #5c6b7c; --line: #d3dce6;
+  --air-blue: #2353a8; --air-red: #c8362f; --accent: #2353a8; --accent-ink: #ffffff; --rule: #c7d3e2;
+  --scrim: rgba(17, 26, 38, .55); --seal-ink: #fbfcfd;
+  --font-display: "Gloock", Georgia, "Times New Roman", serif;
+  --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-hand: "Reenie Beanie", "Segoe Print", "Bradley Hand", cursive;
+}
+@media (prefers-color-scheme: dark) { :root {
+  --bg: #111821; --paper: #18212c; --ink: #e6ecf3; --muted: #94a3b5; --line: #2a3644;
+  --air-blue: #5b8ae0; --air-red: #e0605a; --accent: #6f9ae6; --accent-ink: #0d1520; --rule: #26313e;
+  --scrim: rgba(0, 0, 0, .65); --seal-ink: #18212c; color-scheme: dark } }
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 16px/1.6 var(--font-body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-top: max(32px, env(safe-area-inset-top, 0px)); padding-bottom: max(64px, env(safe-area-inset-bottom, 0px)); }
+.wrap { max-width: 860px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+
+.envelope { background: var(--paper); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; position: relative; }
+.airmail { height: 12px; background: repeating-linear-gradient(-45deg, var(--air-red) 0 14px, var(--paper) 14px 22px, var(--air-blue) 22px 36px, var(--paper) 36px 44px); }
+.env-body { padding: 28px 24px 26px; display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: start; }
+.env-body > div { min-width: 0; }
+.eyebrow { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 0 0 6px; }
+h1 { font: 400 clamp(34px, 7vw, 52px)/1.05 var(--font-display); margin: 0; text-wrap: balance; }
+h1 .hand { font-family: var(--font-hand); color: var(--air-red); font-size: 1.15em; }
+.lede { margin: 12px 0 0; color: var(--muted); max-width: 52ch; font-variant-numeric: tabular-nums; }
+
+.stamp { width: 92px; padding: 6px; background: var(--paper); outline: 2px dashed var(--air-blue); outline-offset: -2px; transform: rotate(4deg); text-align: center; }
+.stamp-inner { border: 1px solid var(--air-blue); padding: 8px 4px; color: var(--air-blue); }
+.stamp .day { font: 400 34px/1 var(--font-display); }
+.stamp .mon { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; }
+.stamp .cd { font-size: 11px; margin-top: 4px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* Lock screen */
+.lock { background: var(--paper); border: 1px solid var(--line); border-radius: 6px; padding: 28px 24px; max-width: 420px; margin: 0 auto; width: 100%; text-align: center; }
+.lock .seal-big { width: 64px; height: 64px; margin: 0 auto 12px; border-radius: 50%; background: var(--air-red); color: var(--seal-ink); display: grid; place-items: center; font: 400 26px/1 var(--font-display); }
+.lock h2 { font: 400 24px/1.2 var(--font-display); margin: 0 0 4px; }
+.lock p { color: var(--muted); margin: 0 0 18px; font-size: 15px; }
+.lock form { display: flex; flex-direction: column; gap: 10px; text-align: left; }
+input[type=password] { width: 100%; font: inherit; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; }
+input:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.check { display: flex; gap: 8px; align-items: center; font-size: 14px; color: var(--muted); }
+.check input { accent-color: var(--accent); }
+.status { font-size: 14px; color: var(--air-red); min-height: 1em; }
+
+button.btn { font: 600 15px var(--font-body); border-radius: 999px; padding: 10px 20px; border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink); cursor: pointer; }
+button.btn.ghost { background: transparent; color: var(--accent); }
+button.btn:disabled { opacity: .55; cursor: default; }
+
+.toolbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.toolbar h2 { font: 400 24px/1.2 var(--font-display); margin: 0; }
+.tools { display: flex; gap: 10px; flex-wrap: wrap; }
+
+/* Envelopes */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
+.env { position: relative; aspect-ratio: 16 / 10; max-width: 100%; border: none; padding: 0; cursor: pointer; text-align: left; font: inherit; color: var(--ink);
+  background: var(--paper); border-radius: 4px; box-shadow: 0 1px 0 var(--line), 0 6px 18px -10px rgba(20, 40, 70, .35); transition: transform .2s; overflow: hidden; }
+.env::before { content: ""; position: absolute; inset: 0; padding: 7px; border-radius: 4px;
+  background: repeating-linear-gradient(-45deg, var(--air-red) 0 10px, transparent 10px 15px, var(--air-blue) 15px 25px, transparent 25px 30px);
+  -webkit-mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+.env:hover { transform: translateY(-3px) rotate(-.6deg); }
+.env:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.env .flap { position: absolute; inset: 7px 7px auto; height: 52%;
+  background: linear-gradient(to bottom right, transparent 49.5%, var(--line) 50%, transparent 50.5%), linear-gradient(to bottom left, transparent 49.5%, var(--line) 50%, transparent 50.5%);
+  background-size: 50% 100%; background-position: left, right; background-repeat: no-repeat; }
+.env .seal { position: absolute; left: 50%; top: 52%; transform: translate(-50%, -50%); width: 40px; height: 40px; border-radius: 50%; background: var(--air-red); color: var(--seal-ink);
+  display: grid; place-items: center; font: 400 18px/1 var(--font-display); }
+.env.read .seal { background: var(--line); color: var(--muted); }
+.env .to { position: absolute; left: 22px; right: 22px; bottom: 16px; display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.env .who { font: 400 28px/1 var(--font-hand); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.env .badge { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; font-weight: 600; color: var(--air-red); flex: none; }
+.env.read .badge { color: var(--muted); }
+
+.empty { text-align: center; padding: 40px 16px; border: 1px dashed var(--line); border-radius: 6px; color: var(--muted); }
+.empty .big { font: 400 34px/1.1 var(--font-hand); color: var(--ink); }
+
+/* Reader */
+.reader { position: fixed; inset: 0; background: var(--scrim); display: grid; place-items: center; z-index: 20;
+  padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
+.sheet { position: relative; width: min(640px, 100%); max-height: 100%; overflow: auto; background: var(--paper); border-radius: 4px; box-shadow: 0 30px 60px -20px rgba(0,0,0,.45); padding: 36px 34px 30px; }
+@media (prefers-reduced-motion: no-preference) { .reader:not([hidden]) .sheet { animation: unfold .5s cubic-bezier(.2,.9,.3,1.1); } }
+@keyframes unfold { from { transform: translateY(40px) rotateX(35deg) scale(.96); opacity: 0; } to { transform: none; opacity: 1; } }
+.from-line { font: 400 24px/1 var(--font-hand); color: var(--muted); padding-right: 40px; overflow-wrap: anywhere; }
+.q { margin-top: 12px; font-size: 13px; color: var(--muted); font-style: italic; }
+.text { margin-top: 14px; padding-bottom: 6px; font: 400 27px/36px var(--font-hand); white-space: pre-wrap; overflow-wrap: anywhere;
+  background-image: repeating-linear-gradient(to bottom, transparent 0 35px, var(--rule) 35px 36px); }
+.greet { font: 400 30px/36px var(--font-hand); color: var(--air-red); }
+.close { position: absolute; top: 10px; right: 10px; width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line); background: var(--paper); color: var(--ink); cursor: pointer; font-size: 18px; line-height: 1; }
+.nav { margin-top: 20px; padding-top: 14px; border-top: 1px dashed var(--line); display: flex; justify-content: space-between; gap: 10px; }
+
+@media (max-width: 480px) {
+  .env-body { grid-template-columns: 1fr; }
+  .stamp { position: absolute; top: 22px; right: 16px; width: 70px; }
+  .stamp .day { font-size: 26px; }
+  .env-body > div:first-child { padding-right: 78px; }
+  .sheet { padding: 40px 20px 22px; }
+  .text { font-size: 24px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="envelope">
+    <div class="airmail"></div>
+    <div class="env-body">
+      <div>
+        <p class="eyebrow">Kotak surat pribadi</p>
+        <h1>Surat-surat untuk <span class="hand">Wedha</span></h1>
+        <p class="lede" id="lede">Dikunci. Cuma Wedha yang punya kuncinya.</p>
+      </div>
+      <div class="stamp" aria-label="Ulang tahun 30 Oktober">
+        <div class="stamp-inner">
+          <div class="day">30</div>
+          <div class="mon">Okt 2026</div>
+          <div class="cd" id="countdown"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="lock" id="lock">
+    <div class="seal-big" aria-hidden="true">D</div>
+    <h2>Buka kotak surat</h2>
+    <p>Masukin password yang kamu pasang di Google Sheets.</p>
+    <form id="lockForm" novalidate>
+      <input type="password" id="pw" placeholder="Password" autocomplete="current-password" aria-label="Password">
+      <label class="check"><input type="checkbox" id="remember"> Ingat di perangkat ini</label>
+      <button class="btn" type="submit" id="unlock">Buka</button>
+      <div class="status" id="lockStatus" role="status" aria-live="polite"></div>
+    </form>
+  </section>
+
+  <section id="box" hidden>
+    <div class="toolbar">
+      <h2>Amplop</h2>
+      <div class="tools">
+        <button class="btn ghost" type="button" id="refresh">Cek surat baru</button>
+        <button class="btn ghost" type="button" id="logout">Kunci lagi</button>
+      </div>
+    </div>
+    <div class="grid" id="grid" style="margin-top:16px"></div>
+    <div class="empty" id="empty" hidden>
+      <div class="big">Belum ada surat masuk</div>
+      <p>Sebar link halaman surat ke temen-temen, terus cek lagi nanti.</p>
+    </div>
+  </section>
+</div>
+
+<div class="reader" id="reader" hidden role="dialog" aria-modal="true" aria-labelledby="rFrom">
+  <article class="sheet">
+    <button class="close" id="rClose" type="button" aria-label="Tutup surat">×</button>
+    <div class="from-line" id="rFrom"></div>
+    <div class="q" id="rQ"></div>
+    <div class="text"><span class="greet">Wedha,</span>
+<span id="rText"></span></div>
+    <div class="nav">
+      <button class="btn ghost" type="button" id="rPrev">← Sebelumnya</button>
+      <button class="btn ghost" type="button" id="rNext">Berikutnya →</button>
+    </div>
+  </article>
+</div>
+
+<script>
+// ====== GANTI INI dengan link Web App dari Apps Script (sama kayak di index.html) ======
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzTpmQbRjwZEIQbVFX_bYEEOSuYPKdP2PCP_Rj2PqXTHCF4uD5SD_-NA7YQ0EXzwII/exec";
+// =======================================================================================
+
+const $ = (id) => document.getElementById(id);
+const PW_KEY = "kotak-dion-pw", READ_KEY = "kotak-dion-read";
+let password = "", letters = [], idx = -1;
+let readSet = new Set();
+try { readSet = new Set(JSON.parse(localStorage.getItem(READ_KEY) || "[]")); } catch (e) {}
+
+(function () {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const days = Math.round((new Date(now.getFullYear(), 9, 30) - today) / 86400000);
+  $("countdown").textContent = days > 0 ? days + " hari lagi" : days === 0 ? "hari ini!" : "";
+})();
+
+function keyOf(l) { return l.time + "|" + l.name; }
+function markRead(l) { readSet.add(keyOf(l)); try { localStorage.setItem(READ_KEY, JSON.stringify([...readSet])); } catch (e) {} }
+
+async function load() {
+  const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "read", password }) });
+  const json = await res.json();
+  if (!json.ok) throw new Error(json.error || "gagal");
+  letters = json.letters;
+}
+
+function render() {
+  const g = $("grid"); g.textContent = "";
+  $("empty").hidden = letters.length > 0;
+  const unread = letters.filter((l) => !readSet.has(keyOf(l))).length;
+  $("lede").textContent = letters.length
+    ? letters.length + " surat masuk" + (unread ? ", " + unread + " belum dibuka." : ". Semua udah dibaca.")
+    : "Kotak suratnya masih kosong.";
+  letters.forEach((l, i) => {
+    const read = readSet.has(keyOf(l));
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "env" + (read ? " read" : "");
+    b.setAttribute("aria-label", "Buka surat dari " + (l.name || "seseorang"));
+    const flap = document.createElement("span"); flap.className = "flap";
+    const seal = document.createElement("span"); seal.className = "seal"; seal.textContent = ((l.name || "?").trim()[0] || "?").toUpperCase();
+    const to = document.createElement("span"); to.className = "to";
+    const who = document.createElement("span"); who.className = "who"; who.textContent = l.name || "Seseorang";
+    const badge = document.createElement("span"); badge.className = "badge"; badge.textContent = read ? "Dibaca" : "Baru";
+    to.append(who, badge); b.append(flap, seal, to);
+    b.addEventListener("click", () => openLetter(i));
+    g.append(b);
+  });
+}
+
+function openLetter(i) {
+  const l = letters[i]; if (!l) return;
+  idx = i;
+  $("rFrom").textContent = "dari " + (l.name || "seseorang");
+  $("rQ").textContent = l.question || "";
+  $("rQ").hidden = !l.question;
+  $("rText").textContent = l.body || "";
+  $("rPrev").disabled = i === 0;
+  $("rNext").disabled = i === letters.length - 1;
+  $("reader").hidden = false;
+  $("reader").querySelector(".sheet").scrollTop = 0;
+  markRead(l); render();
+  $("rClose").focus();
+}
+function closeLetter() { $("reader").hidden = true; idx = -1; }
+$("rClose").addEventListener("click", closeLetter);
+$("rPrev").addEventListener("click", () => openLetter(idx - 1));
+$("rNext").addEventListener("click", () => openLetter(idx + 1));
+$("reader").addEventListener("click", (e) => { if (e.target === $("reader")) closeLetter(); });
+document.addEventListener("keydown", (e) => {
+  if ($("reader").hidden) return;
+  if (e.key === "Escape") closeLetter();
+  if (e.key === "ArrowRight" && idx < letters.length - 1) openLetter(idx + 1);
+  if (e.key === "ArrowLeft" && idx > 0) openLetter(idx - 1);
+});
+
+async function unlock(pw, fromSaved) {
+  const st = $("lockStatus");
+  if (SCRIPT_URL.startsWith("PASTE")) { st.textContent = "Link Web App belum diisi di file kotak.html."; return; }
+  password = pw; $("unlock").disabled = true; st.textContent = fromSaved ? "Membuka…" : "";
+  try {
+    await load();
+    $("lock").hidden = true; $("box").hidden = false; render();
+  } catch (err) {
+    st.textContent = err.message === "wrong_password" ? "Password-nya salah." : "Kotak surat belum bisa dibuka. Cek koneksi, terus coba lagi.";
+    try { if (err.message === "wrong_password") localStorage.removeItem(PW_KEY); } catch (e) {}
+  } finally { $("unlock").disabled = false; }
+}
+
+$("lockForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const pw = $("pw").value;
+  if (!pw) { $("lockStatus").textContent = "Isi password-nya dulu."; return; }
+  try { if ($("remember").checked) localStorage.setItem(PW_KEY, pw); } catch (e) {}
+  unlock(pw, false);
+});
+$("refresh").addEventListener("click", async () => {
+  $("refresh").disabled = true; $("refresh").textContent = "Ngecek…";
+  try { await load(); render(); } catch (e) {}
+  $("refresh").disabled = false; $("refresh").textContent = "Cek surat baru";
+});
+$("logout").addEventListener("click", () => {
+  try { localStorage.removeItem(PW_KEY); } catch (e) {}
+  password = ""; letters = []; $("pw").value = "";
+  $("box").hidden = true; $("lock").hidden = false; $("lede").textContent = "Dikunci. Cuma Wedha yang punya kuncinya.";
+});
+
+try { const saved = localStorage.getItem(PW_KEY); if (saved) unlock(saved, true); } catch (e) {}
+</script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Surat untuk Dion</title>
+<meta name="description" content="Tulis satu surat buat ulang tahun wedha, 30 Oktober.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Figtree:wght@400;500;600&family=Reenie+Beanie&display=swap">
+<style>
+/* Airmail envelope: striped band, a stamp, then lined letter paper. */
+:root {
+  --bg: #e9eef3; --paper: #fbfcfd; --ink: #1d2a3a; --muted: #5c6b7c; --line: #d3dce6;
+  --air-blue: #2353a8; --air-red: #c8362f; --accent: #2353a8; --accent-ink: #ffffff; --rule: #c7d3e2;
+  --font-display: "Gloock", Georgia, "Times New Roman", serif;
+  --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-hand: "Patrick Hand";
+}
+@media (prefers-color-scheme: dark) { :root {
+  --bg: #111821; --paper: #18212c; --ink: #e6ecf3; --muted: #94a3b5; --line: #2a3644;
+  --air-blue: #5b8ae0; --air-red: #e0605a; --accent: #6f9ae6; --accent-ink: #0d1520; --rule: #26313e;
+  color-scheme: dark } }
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 16px/1.6 var(--font-body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-top: max(32px, env(safe-area-inset-top, 0px)); padding-bottom: max(64px, env(safe-area-inset-bottom, 0px)); }
+.wrap { max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+[hidden] { display: none !important; }
+
+.envelope { background: var(--paper); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; position: relative; }
+.airmail { height: 12px; background: repeating-linear-gradient(-45deg, var(--air-red) 0 14px, var(--paper) 14px 22px, var(--air-blue) 22px 36px, var(--paper) 36px 44px); }
+.env-body { padding: 28px 24px 26px; display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: start; }
+.env-body > div { min-width: 0; }
+.eyebrow { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 0 0 6px; }
+h1 { font: 400 clamp(34px, 7vw, 52px)/1.05 var(--font-display); margin: 0; text-wrap: balance; }
+h1 .hand { font-family: var(--font-hand); color: var(--air-red); font-size: 1.15em; }
+.lede { margin: 12px 0 0; color: var(--muted); max-width: 46ch; }
+
+.stamp { width: 92px; padding: 6px; background: var(--paper); outline: 2px dashed var(--air-blue); outline-offset: -2px; transform: rotate(4deg); text-align: center; }
+.stamp-inner { border: 1px solid var(--air-blue); padding: 8px 4px; color: var(--air-blue); }
+.stamp .day { font: 400 34px/1 var(--font-display); }
+.stamp .mon { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; }
+.stamp .cd { font-size: 11px; margin-top: 4px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+.card { background: var(--paper); border: 1px solid var(--line); border-radius: 6px; padding: 24px; }
+h2 { font: 400 26px/1.2 var(--font-display); margin: 0 0 6px; }
+.sub { color: var(--muted); margin: 0 0 18px; font-size: 15px; }
+
+.prompts { display: flex; flex-direction: column; gap: 10px; margin: 0 0 20px; padding: 0; list-style: none; }
+.prompt { display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; border: 1px solid var(--line); border-radius: 6px; cursor: pointer; transition: border-color .15s, background .15s; }
+.prompt:hover { border-color: var(--accent); }
+.prompt input { margin-top: 4px; accent-color: var(--accent); flex: none; width: 16px; height: 16px; }
+.prompt span { min-width: 0; }
+.prompt:has(input:checked) { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 7%, var(--paper)); }
+
+label.field { display: block; font-size: 13px; font-weight: 600; margin: 0 0 6px; }
+input[type=text], textarea { width: 100%; font: inherit; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; }
+input[type=text]:focus-visible, textarea:focus-visible, button:focus-visible, .prompt:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+.lined { font: 400 26px/34px var(--font-hand); min-height: 340px; resize: vertical; padding: 4px 14px;
+  background-image: repeating-linear-gradient(to bottom, transparent 0 33px, var(--rule) 33px 34px); background-attachment: local; }
+.fields { display: flex; flex-direction: column; gap: 16px; }
+.row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; justify-content: space-between; }
+.hint { font-size: 13px; color: var(--muted); }
+button { font: 600 15px var(--font-body); border-radius: 999px; padding: 11px 22px; border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink); cursor: pointer; }
+button.ghost { background: transparent; color: var(--accent); }
+button:disabled { opacity: .55; cursor: default; }
+.status { font-size: 14px; color: var(--air-red); font-weight: 500; min-height: 1em; }
+.honey { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+.sent { text-align: center; padding: 8px 0; }
+.sent .big { font: 400 42px/1.1 var(--font-hand); color: var(--air-red); }
+.seal { width: 64px; height: 64px; margin: 0 auto 10px; border-radius: 50%; background: var(--air-red); color: var(--paper);
+  display: grid; place-items: center; font: 400 24px/1 var(--font-display); box-shadow: inset 0 0 0 4px color-mix(in srgb, var(--paper) 25%, transparent); }
+@media (prefers-reduced-motion: no-preference) { .sent:not([hidden]) .seal { animation: stamp .45s cubic-bezier(.2,1.6,.4,1); } }
+@keyframes stamp { from { transform: scale(1.8) rotate(-20deg); opacity: 0; } to { transform: none; opacity: 1; } }
+
+@media (max-width: 480px) {
+  .env-body { grid-template-columns: 1fr; }
+  .stamp { position: absolute; top: 22px; right: 16px; width: 70px; }
+  .stamp .day { font-size: 26px; }
+  .env-body > div:first-child { padding-right: 78px; }
+  .card { padding: 18px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="envelope">
+    <div class="airmail"></div>
+    <div class="env-body">
+      <div>
+        <p class="eyebrow">Hiii, Long Time No See</p>
+        <h1>Tulis Surat <span class="hand">Wedha</span></h1>
+        <p class="lede">buat birthday tahun ini aku mau req satu hal dari kalian hehe... maaf merepotkann... Tulisin aja tentang apa manfaat atau momen dimana kamu ngerasa aku pernah membantu or berarti buat kamu, pokoknya yang paling keinget!!! Ada ga sesuatu yang somehow bikin kamu tersadar atau menginspirasi gitu? Boleh juga kasih gw pesan manis hehe, thanksssss.</p>
+      </div>
+      <div class="stamp" aria-label="Ulang tahun 30 Oktober">
+        <div class="stamp-inner">
+          <div class="day">30</div>
+          <div class="mon">Okt 2026</div>
+          <div class="cd" id="countdown"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="card">
+    <div id="writeForm">
+      <h2>TULIS DISINI YAAA</h2>
+      <p class="sub">tulis bebas apa aja, pokoknya semuanyaaaaa</p>
+      <form class="fields" id="form" novalidate>
+        <div>
+          <label class="field" for="name">Dari</label>
+          <input type="text" id="name" maxlength="60" placeholder="Nama" autocomplete="name">
+        </div>
+        <div>
+          <label class="field" for="body">Surat</label>
+          <textarea id="body" class="lined" maxlength="8000" placeholder="Wedha....."></textarea>
+        </div>
+        <div class="honey" aria-hidden="true"><input type="checkbox" id="botcheck" tabindex="-1"></div>
+        <div class="row">
+          <button type="submit" id="send">Kirim surat</button>
+        </div>
+        <div class="status" id="status" role="status" aria-live="polite"></div>
+      </form>
+    </div>
+    <div class="sent" id="sent" hidden>
+      <div class="seal" aria-hidden="true">D</div>
+      <div class="big">Suratnya udah sampai.</div>
+      <p class="sub">MAKASIHHH udah nulis, bakalan aku baca nantinyaaa.</p>
+      <button type="button" class="ghost" id="another">Tulis surat lagi</button>
+    </div>
+  </section>
+</div>
+
+<script>
+// ====== GANTI INI dengan link Web App dari Apps Script ======
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzTpmQbRjwZEIQbVFX_bYEEOSuYPKdP2PCP_Rj2PqXTHCF4uD5SD_-NA7YQ0EXzwII/exec";
+// ============================================================
+
+const $ = (id) => document.getElementById(id);
+
+(function () {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const days = Math.round((new Date(now.getFullYear(), 9, 30) - today) / 86400000);
+  $("countdown").textContent = days > 0 ? days + " hari lagi" : days === 0 ? "hari ini!" : "";
+})();
+
+// Draft disimpan di browser penulis, biar nggak hilang kalau ketutup
+const DRAFT = "surat-dion-draft";
+try { const d = JSON.parse(localStorage.getItem(DRAFT) || "null"); if (d) { $("name").value = d.name || ""; $("body").value = d.body || ""; } } catch (e) {}
+let t;
+["name", "body"].forEach((id) => $(id).addEventListener("input", () => {
+  clearTimeout(t);
+  t = setTimeout(() => { try { localStorage.setItem(DRAFT, JSON.stringify({ name: $("name").value, body: $("body").value })); } catch (e) {} }, 400);
+}));
+
+$("another").addEventListener("click", () => {
+  $("name").value = ""; $("body").value = "";
+  $("sent").hidden = true; $("writeForm").hidden = false; $("name").focus();
+});
+
+$("form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const st = $("status");
+  const name = $("name").value.trim();
+  const body = $("body").value.trim();
+  if (!name) { st.textContent = "Isi nama lo dulu biar Dion tahu ini dari siapa."; $("name").focus(); return; }
+  if (body.length < 10) { st.textContent = "Suratnya masih kosong. Tulis minimal satu dua kalimat ya."; $("body").focus(); return; }
+  if (SCRIPT_URL.startsWith("PASTE")) { st.textContent = "Halaman ini belum disambungin ke kotak surat Dion (link Web App belum diisi)."; return; }
+
+  $("send").disabled = true; st.textContent = "";
+  $("send").textContent = "Mengirim…";
+  try {
+    // text/plain biar Google Apps Script nerima tanpa ribet
+    const res = await fetch(SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify({ name, body, question: "", botcheck: $("botcheck").checked })
+    });
+    const json = await res.json().catch(() => ({}));
+    if (!json.ok) throw new Error(json.error || "gagal");
+    try { localStorage.removeItem(DRAFT); } catch (e) {}
+    $("writeForm").hidden = true; $("sent").hidden = false;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  } catch (err) {
+    st.textContent = "Suratnya belum kekirim. Cek koneksi, terus coba kirim lagi. Tulisan lo masih aman di sini.";
+  } finally {
+    $("send").disabled = false; $("send").textContent = "Kirim surat";
+  }
+});
+</script>
+</body>
+</html>
